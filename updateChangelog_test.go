@@ -9,7 +9,7 @@ import (
 
 type errorWriter struct{}
 
-func (ew *errorWriter) Write(p []byte) (n int, err error) {
+func (ew *errorWriter) Write(_ []byte) (n int, err error) {
 	return 0, fmt.Errorf("simulated writer error")
 }
 

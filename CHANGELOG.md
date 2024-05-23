@@ -33,3 +33,6 @@
 ## 4.2.0
 - Broken away another part of main.go into a separate file and added more tests
   Improved testability and added more tests
+## 4.3.0
+- General styling updated and removed warnings
+  Replaced deprecated functions and better handled errors when deferring closing of tmp files

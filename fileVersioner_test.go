@@ -1,25 +1,34 @@
 package main
 
 import (
-	"io/ioutil"
 	"os"
 	"testing"
 )
 
 func TestFileVersioner_ReadVersion(t *testing.T) {
 	// Create a temporary file
-	tempFile, err := ioutil.TempFile("", "VERSION")
+	tempFile, err := os.CreateTemp("", "VERSION")
 	if err != nil {
 		t.Fatalf("Failed to create temp file: %s", err)
 	}
-	defer os.Remove(tempFile.Name()) // Clean up after the test
+	defer func() {
+		cerr := os.Remove(tempFile.Name()) // Clean up after the test
+		if err == nil {                    // only overwrite err if it's still nil
+			err = cerr
+		}
+	}()
 
 	// Write a version to the temp file
 	versionContent := "1.0.2"
 	if _, err := tempFile.WriteString(versionContent); err != nil {
 		t.Fatalf("Failed to write to temp file: %s", err)
 	}
-	tempFile.Close() // Close the file to allow reading from it later
+	defer func() {
+		cerr := tempFile.Close()
+		if err == nil { // only overwrite err if it's still nil
+			err = cerr
+		}
+	}()
 
 	// Test reading the version
 	fv := FileVersioner{FilePath: tempFile.Name()}
@@ -34,14 +43,23 @@ func TestFileVersioner_ReadVersion(t *testing.T) {
 
 func TestFileVersioner_WriteVersion(t *testing.T) {
 	// Create a temporary file
-	tempFile, err := ioutil.TempFile("", "VERSION")
+	tempFile, err := os.CreateTemp("", "VERSION")
 	if err != nil {
 		t.Fatalf("Failed to create temp file: %s", err)
 	}
 	tempFilePath := tempFile.Name()
-	tempFile.Close() // Close the file as it will be opened again by WriteVersion
-
-	defer os.Remove(tempFilePath) // Clean up after the test
+	defer func() {
+		cerr := tempFile.Close()
+		if err == nil { // only overwrite err if it's still nil
+			err = cerr
+		}
+	}()
+	defer func() {
+		cerr := os.Remove(tempFilePath) // Clean up after the test
+		if err == nil {                 // only overwrite err if it's still nil
+			err = cerr
+		}
+	}()
 
 	// Instance of FileVersioner with the path to the temp file
 	fv := FileVersioner{FilePath: tempFilePath}
@@ -55,7 +73,7 @@ func TestFileVersioner_WriteVersion(t *testing.T) {
 	}
 
 	// Read back the contents of the file to verify it was written correctly
-	content, err := ioutil.ReadFile(tempFilePath)
+	content, err := os.ReadFile(tempFilePath)
 	if err != nil {
 		t.Fatalf("Failed to read back the temp file: %s", err)
 	}

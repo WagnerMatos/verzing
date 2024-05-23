@@ -11,7 +11,7 @@ type MockExecutor struct {
 	ShouldFail bool
 }
 
-func (m MockExecutor) Run(cmd *exec.Cmd) error {
+func (m MockExecutor) Run(_ *exec.Cmd) error {
 	if m.ShouldFail {
 		return fmt.Errorf("mock error")
 	}

@@ -21,7 +21,12 @@ func (fv FileVersioner) ReadVersion() (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("error opening version file: %w", err)
 	}
-	defer file.Close()
+	defer func() {
+		cerr := file.Close()
+		if err == nil { // only overwrite err if it's still nil
+			err = cerr
+		}
+	}()
 
 	scanner := bufio.NewScanner(file)
 	if scanner.Scan() {
@@ -40,7 +45,12 @@ func (fv FileVersioner) WriteVersion(version string) error {
 	if err != nil {
 		return fmt.Errorf("error opening version file for write: %w", err)
 	}
-	defer file.Close()
+	defer func() {
+		cerr := file.Close()
+		if err == nil { // only overwrite err if it's still nil
+			err = cerr
+		}
+	}()
 
 	_, err = file.WriteString(version + "\n")
 	if err != nil {

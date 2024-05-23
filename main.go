@@ -52,7 +52,12 @@ func main() {
 		fmt.Println("Error opening CHANGELOG.md:", err)
 		return
 	}
-	defer file.Close()
+	defer func() {
+		cerr := file.Close()
+		if err == nil { // only overwrite err if it's still nil
+			err = cerr
+		}
+	}()
 
 	if err := updateChangelog(file, version, shortDesc, longDesc); err != nil {
 		fmt.Println("Error updating CHANGELOG:", err)
