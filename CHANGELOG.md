@@ -11,3 +11,6 @@
 ## 1.0.0
 - IMproving file versioning
   Long
+## 2.0.0
+- Breaking down the main.go into smaller parts
+  Refactoring to improve code readaability
