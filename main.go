@@ -38,7 +38,7 @@ func main() {
 	breakingChange := strings.TrimSpace(breakingChangeInput) == "yes"
 
 	// Create a FileVersioner instance
-	fileVersioner := FileVersioner{}
+	fileVersioner := FileVersioner{FilePath: "VERSION.md"}
 
 	// Handle versioning
 	version, err := updateVersion(fileVersioner, selectedType, breakingChange)

@@ -7,16 +7,20 @@ import (
 	"strings"
 )
 
-// FileVersioner implements Versioner with actual file operations.
-type FileVersioner struct{}
+type Versioner interface {
+	ReadVersion() (string, error)
+	WriteVersion(version string) error
+}
 
-// ReadVersion reads the version from VERSION.md file.
+type FileVersioner struct {
+	FilePath string
+}
+
 func (fv FileVersioner) ReadVersion() (string, error) {
-	file, err := os.Open("VERSION.md")
+	file, err := os.Open(fv.FilePath)
 	if err != nil {
-		return "", fmt.Errorf("error opening file: %v", err)
+		return "", fmt.Errorf("error opening version file: %w", err)
 	}
-
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
@@ -25,23 +29,22 @@ func (fv FileVersioner) ReadVersion() (string, error) {
 	}
 
 	if err := scanner.Err(); err != nil {
-		return "", fmt.Errorf("error reading VERSION.md file: %v", err)
+		return "", fmt.Errorf("error reading version file: %w", err)
 	}
 
-	return "", fmt.Errorf("VERSION.md file is empty")
+	return "", fmt.Errorf("version file is empty")
 }
 
-// WriteVersion writes the updated version to the VERSION.md file.
 func (fv FileVersioner) WriteVersion(version string) error {
-	file, err := os.OpenFile("VERSION.md", os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0644)
+	file, err := os.OpenFile(fv.FilePath, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0644)
 	if err != nil {
-		return fmt.Errorf("error opening VERSION.md file: %v", err)
+		return fmt.Errorf("error opening version file for write: %w", err)
 	}
 	defer file.Close()
 
 	_, err = file.WriteString(version + "\n")
 	if err != nil {
-		return fmt.Errorf("error writing VERSION.md file: %v", err)
+		return fmt.Errorf("error writing to version file: %w", err)
 	}
 
 	return nil

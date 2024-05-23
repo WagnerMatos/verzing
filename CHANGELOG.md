@@ -7,10 +7,13 @@
   Previously the change in the CHANGELOG file was happening after the commit meaning there was still change uncommitted. We updated so now the everything is added as part of the commmit
 ## 1.0.0
 - Adding tests and improving testability
-  Working on imrpoving the tests as well as making the app more robust
+  Working on improving the tests as well as making the app more robust
 ## 1.0.0
-- IMproving file versioning
+- Improving file versioning
   Long
 ## 2.0.0
 - Breaking down the main.go into smaller parts
-  Refactoring to improve code readaability
+  Refactoring to improve code readability
+## 3.0.0
+- Improving testability of functions
+  Breaking the app into smaller files and adding tests
