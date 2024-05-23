@@ -6,12 +6,6 @@ import (
 	"strings"
 )
 
-// Versioner defines the operations needed for version handling.
-//type Versioner interface {
-//	ReadVersion() (string, error)
-//	WriteVersion(version string) error
-//}
-
 // updateVersion reads, updates, and writes back the version.
 func updateVersion(v Versioner, commitType string, breakingChange bool) (string, error) {
 	version, err := v.ReadVersion()
