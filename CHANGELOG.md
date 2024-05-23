@@ -8,3 +8,6 @@
 ## 1.0.0
 - Adding tests and improving testability
   Working on imrpoving the tests as well as making the app more robust
+## 1.0.0
+- IMproving file versioning
+  Long
