@@ -17,3 +17,6 @@
 ## 3.0.0
 - Improving testability of functions
   Breaking the app into smaller files and adding tests
+## 3.1.0
+- Added tests for func TestFileVersioner_WriteVersion(t *testing.T) {
+  // Create a temporary file

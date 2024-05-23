@@ -33,31 +33,35 @@ func TestFileVersioner_ReadVersion(t *testing.T) {
 }
 
 func TestFileVersioner_WriteVersion(t *testing.T) {
-	// Setup: Create a temporary file to act as VERSION file
+	// Create a temporary file
 	tempFile, err := ioutil.TempFile("", "VERSION")
 	if err != nil {
 		t.Fatalf("Failed to create temp file: %s", err)
 	}
-	defer os.Remove(tempFile.Name()) // Clean up after the test
+	tempFilePath := tempFile.Name()
+	tempFile.Close() // Close the file as it will be opened again by WriteVersion
 
-	// Temporarily replace the file path used in FileVersioner
-	oldName := "VERSION"                      // Assume this is the constant or variable used.
-	os.Rename(tempFile.Name(), oldName)       // This is just for demonstration. Typically, you would inject the file path.
-	defer os.Rename(oldName, tempFile.Name()) // Restore the original state after test
+	defer os.Remove(tempFilePath) // Clean up after the test
 
-	// Test writing the version
-	fv := FileVersioner{}
-	newVersion := "2.0.1"
-	if err := fv.WriteVersion(newVersion); err != nil {
+	// Instance of FileVersioner with the path to the temp file
+	fv := FileVersioner{FilePath: tempFilePath}
+
+	// Version string to be written
+	testVersion := "2.0.3"
+
+	// Write the version to the temp file using WriteVersion
+	if err := fv.WriteVersion(testVersion); err != nil {
 		t.Errorf("WriteVersion() error = %v", err)
 	}
 
-	// Read back the content to verify it's correct
-	content, err := ioutil.ReadFile(oldName)
+	// Read back the contents of the file to verify it was written correctly
+	content, err := ioutil.ReadFile(tempFilePath)
 	if err != nil {
-		t.Fatalf("Failed to read temp file: %s", err)
+		t.Fatalf("Failed to read back the temp file: %s", err)
 	}
-	if string(content) != newVersion {
-		t.Errorf("WriteVersion() failed, got = %v, want %v", string(content), newVersion)
+
+	// Check if the content of the file is exactly what we wrote
+	if string(content) != testVersion+"\n" { // Remember WriteVersion adds a newline
+		t.Errorf("WriteVersion() failed, content = %q, want %q", string(content), testVersion+"\n")
 	}
 }
