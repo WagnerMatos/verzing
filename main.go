@@ -44,16 +44,16 @@ func main() {
 		return
 	}
 
+	// Update CHANGELOG.md
+	if err := updateChangelog(version, shortDesc, longDesc); err != nil {
+		fmt.Println("Error updating CHANGELOG:", err)
+		return
+	}
+
 	// Commit changes
 	commitMessage := fmt.Sprintf("%s: %s\n\n%s", selectedType, shortDesc, longDesc)
 	if err := commitChanges(commitMessage); err != nil {
 		fmt.Println("Error committing changes:", err)
-		return
-	}
-
-	// Update CHANGELOG.md
-	if err := updateChangelog(version, shortDesc, longDesc); err != nil {
-		fmt.Println("Error updating CHANGELOG:", err)
 		return
 	}
 
