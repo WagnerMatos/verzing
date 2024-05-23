@@ -10,7 +10,7 @@ import (
 
 // updateVersion reads the current version, increments it based on the commit type and breaking changes, and writes it back.
 func updateVersion(commitType string, breakingChange bool) (string, error) {
-	// Read the current version from the VERSION file
+	// Read the current version from the VERSION.md file
 	version, err := readVersion()
 	if err != nil {
 		return "", err
@@ -50,9 +50,9 @@ func updateVersion(commitType string, breakingChange bool) (string, error) {
 	return newVersion, nil
 }
 
-// readVersion reads the version from the VERSION file
+// readVersion reads the version from the VERSION.md file
 func readVersion() (string, error) {
-	file, err := os.Open("VERSION")
+	file, err := os.Open("VERSION.md")
 	if err != nil {
 		return "", err
 	}
@@ -66,9 +66,9 @@ func readVersion() (string, error) {
 	return "", fmt.Errorf("failed to read version")
 }
 
-// writeVersion writes the updated version to the VERSION file
+// writeVersion writes the updated version to the VERSION.md file
 func writeVersion(version string) error {
-	file, err := os.OpenFile("VERSION", os.O_WRONLY|os.O_TRUNC, 0644)
+	file, err := os.OpenFile("VERSION.md", os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
 		return err
 	}
