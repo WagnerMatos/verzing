@@ -47,7 +47,14 @@ func main() {
 	}
 
 	// Update CHANGELOG.md
-	if err := updateChangelog(version, shortDesc, longDesc); err != nil {
+	file, err := os.OpenFile("CHANGELOG.md", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Println("Error opening CHANGELOG.md:", err)
+		return
+	}
+	defer file.Close()
+
+	if err := updateChangelog(file, version, shortDesc, longDesc); err != nil {
 		fmt.Println("Error updating CHANGELOG:", err)
 		return
 	}
