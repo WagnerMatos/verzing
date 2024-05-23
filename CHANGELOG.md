@@ -38,3 +38,6 @@
 ## 4.4.0
 - Fixed a couple typos
   Just minor grammatical change in the documentation
+## 4.5.0
+- Fixed typo in do.mod
+  Fixed the repo name in go.mod
