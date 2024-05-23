@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"os/exec"
 	"strconv"
 	"strings"
 )
@@ -55,26 +54,13 @@ func main() {
 
 	// Commit changes
 	commitMessage := fmt.Sprintf("%s: %s\n\n%s", selectedType, shortDesc, longDesc)
-	if err := commitChanges(commitMessage); err != nil {
+	executor := RealExecutor{}
+	if err := commitChanges(commitMessage, executor); err != nil {
 		fmt.Println("Error committing changes:", err)
 		return
 	}
 
 	fmt.Println("Commit and changelog update completed successfully.")
-}
-
-//func updateVersion(commitType string, breakingChange bool) (string, error) {
-//	// Dummy version update logic
-//	return "v1.0.0", nil // Replace with actual versioning logic
-//}
-
-func commitChanges(message string) error {
-	cmd := exec.Command("git", "add", ".")
-	if err := cmd.Run(); err != nil {
-		return err
-	}
-	cmd = exec.Command("git", "commit", "-m", message)
-	return cmd.Run()
 }
 
 func updateChangelog(version, shortDesc, longDesc string) error {

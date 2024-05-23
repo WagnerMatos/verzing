@@ -23,3 +23,6 @@
 ## 3.2.0
 - Added more tests
   Improved testability and added more test use cases
+## 4.0.0
+- Broken main.go into smaller chunks and added more tests
+  Added series of tests for the commitChange function
