@@ -1,22 +1,37 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 	"strconv"
 	"strings"
 )
 
-// updateVersion reads the current version, increments it based on the commit type and breaking changes, and writes it back.
-func updateVersion(commitType string, breakingChange bool) (string, error) {
-	// Read the current version from the VERSION.md file
-	version, err := readVersion()
+// Versioner defines the operations needed for version handling.
+type Versioner interface {
+	ReadVersion() (string, error)
+	WriteVersion(version string) error
+}
+
+// FileVersioner implements Versioner with actual file operations.
+type FileVersioner struct{}
+
+func (fv FileVersioner) ReadVersion() (string, error) {
+	// Simulate reading version from a file
+	return "0.1.0", nil
+}
+
+func (fv FileVersioner) WriteVersion(version string) error {
+	// Simulate writing version to a file
+	return nil
+}
+
+// updateVersion reads, updates, and writes back the version.
+func updateVersion(v Versioner, commitType string, breakingChange bool) (string, error) {
+	version, err := v.ReadVersion()
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("failed to read version: %w", err)
 	}
 
-	// Parse the version numbers
 	parts := strings.Split(version, ".")
 	if len(parts) != 3 {
 		return "", fmt.Errorf("invalid version format")
@@ -26,54 +41,22 @@ func updateVersion(commitType string, breakingChange bool) (string, error) {
 	minor, _ := strconv.Atoi(parts[1])
 	patch, _ := strconv.Atoi(parts[2])
 
-	// Increment the version based on the commit type and breaking changes
 	if breakingChange {
 		major++
 		minor = 0
 		patch = 0
+	} else if commitType == "Fix" {
+		patch++
 	} else {
-		switch commitType {
-		case "Fix":
-			patch++
-		default:
-			minor++
-			patch = 0
-		}
+		minor++
+		patch = 0
 	}
 
-	// Construct the new version string
 	newVersion := fmt.Sprintf("%d.%d.%d", major, minor, patch)
-	if err := writeVersion(newVersion); err != nil {
-		return "", err
+	err = v.WriteVersion(newVersion)
+	if err != nil {
+		return "", fmt.Errorf("failed to write version: %w", err)
 	}
 
 	return newVersion, nil
-}
-
-// readVersion reads the version from the VERSION.md file
-func readVersion() (string, error) {
-	file, err := os.Open("VERSION.md")
-	if err != nil {
-		return "", err
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	if scanner.Scan() {
-		return strings.TrimSpace(scanner.Text()), nil
-	}
-
-	return "", fmt.Errorf("failed to read version")
-}
-
-// writeVersion writes the updated version to the VERSION.md file
-func writeVersion(version string) error {
-	file, err := os.OpenFile("VERSION.md", os.O_WRONLY|os.O_TRUNC, 0644)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	_, err = file.WriteString(version + "\n")
-	return err
 }

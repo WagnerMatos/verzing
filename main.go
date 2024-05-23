@@ -37,8 +37,11 @@ func main() {
 	breakingChangeInput, _ := reader.ReadString('\n')
 	breakingChange := strings.TrimSpace(breakingChangeInput) == "yes"
 
+	// Create a FileVersioner instance
+	fileVersioner := FileVersioner{}
+
 	// Handle versioning
-	version, err := updateVersion(selectedType, breakingChange)
+	version, err := updateVersion(fileVersioner, selectedType, breakingChange)
 	if err != nil {
 		fmt.Println("Error updating version:", err)
 		return
