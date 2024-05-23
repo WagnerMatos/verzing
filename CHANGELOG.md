@@ -4,7 +4,7 @@
   Long description
 ## 0.1.1
 - Updated the order so the changelog change is included in the commit
-  Previously the change in the CHANGELOG file was happening after the commit meaning there was still change uncommitted. We updated so now the everything is added as part of the commmit
+  Previously the change in the CHANGELOG file was happening after the commit meaning there was still change uncommitted. We updated so now everything is included as part of the commit
 ## 1.0.0
 - Adding tests and improving testability
   Working on improving the tests as well as making the app more robust
@@ -28,11 +28,13 @@
   Added series of tests for the commitChange function
 ## 4.1.0
 - Broken parts of main.go away and added more tests
-  Moved updateChangelog to a separate for better testability and added tests for it
-
+  Moved updateChangelog to a separate for better testability and added tests for its
 ## 4.2.0
 - Broken away another part of main.go into a separate file and added more tests
   Improved testability and added more tests
 ## 4.3.0
 - General styling updated and removed warnings
   Replaced deprecated functions and better handled errors when deferring closing of tmp files
+## 4.4.0
+- Fixed a couple typos
+  Just minor grammatical change in the documentation
