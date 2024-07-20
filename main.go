@@ -67,7 +67,7 @@ func main() {
 	// Commit changes
 	commitMessage := fmt.Sprintf("%s: %s\n\n%s", selectedType, shortDesc, longDesc)
 	executor := RealExecutor{}
-	if err := commitChanges(commitMessage, executor); err != nil {
+	if err := commitChanges(commitMessage, executor, fileVersioner); err != nil {
 		fmt.Println("Error committing changes:", err)
 		return
 	}

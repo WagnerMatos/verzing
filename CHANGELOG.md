@@ -41,3 +41,5 @@
 ## 4.5.0
 - Fixed typo in do.mod
   Fixed the repo name in go.mod
+## 4.6.0
+- Added flag createion when committing
