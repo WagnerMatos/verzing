@@ -43,3 +43,5 @@
   Fixed the repo name in go.mod
 ## 4.6.0
 - Added flag createion when committing
+## 4.6.1
+- Added built package
